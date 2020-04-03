@@ -1,0 +1,24 @@
+{
+  "name": "performance-rating-system-server",
+  "version": "0.1.0",
+  "description": "this is node server for performance rating application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.10",
+    "morgan": "^1.9.1"
+  },
+  "keywords": [
+    "performance",
+    "rating"
+  ],
+  "author": "Kireeti Ganisetti",
+  "license": "ISC"
+}
