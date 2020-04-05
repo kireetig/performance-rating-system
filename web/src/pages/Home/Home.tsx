@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./home.module.scss";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, CardDeck } from "react-bootstrap";
 import { CREATE_PROJECT_URL, PROJECT_DETAILS_URL } from "../../contants/routerContants";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../utils/api";
@@ -34,9 +34,9 @@ export const Home: React.FC = (props) => {
           </Link>
         </div>
       </div>
-      <div className="d-flex">
+      <div className={styles.grid}>
         {projects.map((project) => (
-          <Card key={project._id} className={styles.card}>
+          <Card key={project._id} className={`${styles.card} col`}>
             <Card.Body>
               <Card.Title>{project.name}</Card.Title>
               <Card.Text className={styles.description}>{project.description}</Card.Text>

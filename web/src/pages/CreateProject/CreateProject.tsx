@@ -199,7 +199,7 @@ export const CreateProject: React.FC = (props) => {
             <div className="col-md-3 col-12 d-flex align-items-center">
               <Button
                 variant="outline-info"
-                className={"ml-auto"}
+                className={"m-auto"}
                 onClick={addParticipant}
               >
                 Add Participants
