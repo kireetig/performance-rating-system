@@ -1,1 +1,5 @@
 server/node_modules
+
+// it constains configurations which should be shared so not committing it
+
+server/config/config.json

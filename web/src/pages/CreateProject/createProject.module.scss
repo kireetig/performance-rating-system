@@ -1,0 +1,27 @@
+.content{
+    h3{
+        text-align: center;
+        margin-top: 10px;
+    }
+    label{
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+    input{
+        width: 80%;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid grey;
+    }
+    th{
+        text-align: center;
+    }
+}
