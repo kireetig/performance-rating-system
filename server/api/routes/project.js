@@ -31,15 +31,16 @@ router.post('/create', checkToken, (req, res, next) => {
 
 router.post('/update', checkToken, (req, res, next) => { 
     const payload = req.body;
-    const project = new Project({
+    const project = {
         name: payload.name,
         description: payload.description,
         userId: payload.userId,
         startDate: payload.startDate,
         endDate: payload.endDate,
         participants: payload.participants
-    });
-    project.update({_id: payload._id}).then(result => {
+    };
+
+    Project.replaceOne({_id: payload._id}, project).then(result => {
         res.status(200).json({
             status: 200,
             data: result

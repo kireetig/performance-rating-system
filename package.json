@@ -1,0 +1,24 @@
+{
+  "name": "performance-rating-system",
+  "version": "0.1.0",
+  "description": "This is used to create and rate few employees",
+  "scripts": {
+    "web": "cd web && npm start",
+    "server": "cd server && npm start",
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run web\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kireetig/performance-rating-system.git"
+  },
+  "author": "Kireeti Ganisetti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kireetig/performance-rating-system/issues"
+  },
+  "homepage": "https://github.com/kireetig/performance-rating-system#readme",
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  }
+}

@@ -10,13 +10,18 @@ const projectSchema = new Schema({
   endDate: { type: Date, required: true },
   participants: [
     {
-      _id: { type: String },
       name: { type: String },
       email: {
         type: String,
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
       },
       position: { type: String },
+      ratees: [{
+        name: { type: String },
+        email: { type: String },
+        position: { type: String },
+        answers: {type: Array}
+      }]
     },
   ],
 });

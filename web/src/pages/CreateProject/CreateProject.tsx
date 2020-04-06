@@ -8,7 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { HOME_URL } from "../../contants/routerContants";
 import * as _ from "lodash";
 import { USER_ID } from "../../contants/storageContants";
-import moment from "moment";
+import { ParticipantList } from "./ParticipantList/ParticipantList";
 
 export interface IProject {
   _id?: string;
@@ -19,11 +19,22 @@ export interface IProject {
   participants?: IParticipant[];
 }
 
+
+
 export interface IParticipant {
+  _id?: any;
   name: string;
   email: string;
   position: string;
+  ratees:  IRatee[];
 }
+
+interface IRatee{
+  name: string;
+  email: string;
+  position: string;
+  answers: any[];
+};
 
 export const CreateProject: React.FC = (props) => {
   const [project, setProject] = React.useState<IProject>({
@@ -37,6 +48,7 @@ export const CreateProject: React.FC = (props) => {
     name: "",
     email: "",
     position: "",
+    ratees: []
   });
 
   const history = useHistory();
@@ -56,7 +68,7 @@ export const CreateProject: React.FC = (props) => {
       delete proj.__v;
       setProject(proj);
     }
-  }, []);
+  }, [history.location.state]);
 
   const handleParticipantChange = (value: string, key: string) => {
     const part = Object.assign({}, participant) as any;
@@ -107,6 +119,7 @@ export const CreateProject: React.FC = (props) => {
         name: "",
         email: "",
         position: "",
+        ratees: []
       });
     } else {
       toast.error("Fill in proper details");
@@ -208,24 +221,7 @@ export const CreateProject: React.FC = (props) => {
           </div>
         </div>
         <div className="col-12">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Position</th>
-              </tr>
-            </thead>
-            <tbody>
-              {project.participants?.map((p, i) => (
-                <tr key={`${p.name}-${i}`}>
-                  <td>{p.name}</td>
-                  <td>{p.email}</td>
-                  <td>{p.position}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              <ParticipantList list={project?.participants || []}/>
         </div>
         <div className="col-12 text-center mt-5">
           <Button variant="primary" onClick={createProject}>

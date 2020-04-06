@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./home.module.scss";
-import { Button, Card, CardDeck } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { CREATE_PROJECT_URL, PROJECT_DETAILS_URL } from "../../contants/routerContants";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../utils/api";

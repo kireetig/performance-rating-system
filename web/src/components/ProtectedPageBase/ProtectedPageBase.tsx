@@ -14,7 +14,7 @@ export const ProtectedPageBase: React.FC = () => {
         if (!token) {
           history.push(LOGIN_URL);
         }
-      }, []);
+      }, [history.location.pathname]);
       
   return (
     <>
