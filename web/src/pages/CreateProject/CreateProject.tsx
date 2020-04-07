@@ -26,10 +26,10 @@ export interface IParticipant {
   name: string;
   email: string;
   position: string;
-  ratees:  IRatee[];
+  raters:  IRater[];
 }
 
-interface IRatee{
+interface IRater{
   name: string;
   email: string;
   position: string;
@@ -48,8 +48,9 @@ export const CreateProject: React.FC = (props) => {
     name: "",
     email: "",
     position: "",
-    ratees: []
+    raters: []
   });
+  const [isInviteBtnDisabled, setIsInviteBtnDisabled ] = React.useState<boolean>(false);
 
   const history = useHistory();
   const { projectId } = useParams();
@@ -119,12 +120,23 @@ export const CreateProject: React.FC = (props) => {
         name: "",
         email: "",
         position: "",
-        ratees: []
+        raters: []
       });
     } else {
       toast.error("Fill in proper details");
     }
   };
+
+  const inviteAll = () => {
+    setIsInviteBtnDisabled(true);
+    axiosInstance.get(`/project/${projectId}/invite`).then(res => {
+      toast.success("Succesfully invited everyone");
+    }).catch(err => {
+      toast.error("Something went wrong. Please try again later");
+    }).finally(() => {
+      setIsInviteBtnDisabled(false);
+    });
+  }
 
   return (
     <div className={`container ${style.content}`}>
@@ -219,6 +231,11 @@ export const CreateProject: React.FC = (props) => {
               </Button>
             </div>
           </div>
+        </div>
+        <div className="col-12">
+        <Button variant="primary" disabled={isInviteBtnDisabled} className="mb-2" onClick={inviteAll}>
+            Invite All
+          </Button>
         </div>
         <div className="col-12">
               <ParticipantList list={project?.participants || []}/>

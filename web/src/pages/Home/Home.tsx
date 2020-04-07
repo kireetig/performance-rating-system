@@ -57,6 +57,9 @@ export const Home: React.FC = (props) => {
           </Card>
         ))}
       </div>
+      <div>
+        {projects.length === 0 && <h4 className={'text-center'}>No Projects, Create a new project</h4>}
+      </div>
     </div>
   );
 };

@@ -22,15 +22,15 @@ export const ListModal: React.FC<IListModal> = (props) => {
         position: participant.position,
         answers: [],
       };
-      props.participantList[props.selectedIndex]?.ratees?.push(ratee);
+      props.participantList[props.selectedIndex]?.raters?.push(ratee);
     } else {
-      props.participantList[props.selectedIndex]?.ratees?.splice(i, 1);
+      props.participantList[props.selectedIndex]?.raters?.splice(i, 1);
     }
   };
 
   const isChecked = (val: any) => {
     const i = _.findIndex(
-      props.participantList[props.selectedIndex]?.ratees,
+      props.participantList[props.selectedIndex]?.raters,
       (o: any) => {
         return o._id === val;
       }

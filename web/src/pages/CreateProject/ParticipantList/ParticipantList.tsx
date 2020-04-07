@@ -45,18 +45,18 @@ export const ParticipantList: React.FC<IParticipantList> = (props) => {
               <Card.Body>
                 <div className="d-flex">
                   <h5>
-                    Ratee{" "}
+                    Raters{" "}
                     <span className={style.add} onClick={() => handleClose(i)}>
                       <FontAwesomeIcon icon={faPlus} />
                     </span>
                   </h5>
                 </div>
-                {participant.ratees.map((ratee, i) => (
-                  <div className={"d-flex"} key={`${ratee.name}-${i}`}>
+                {participant.raters.map((rater, i) => (
+                  <div className={"d-flex"} key={`${rater.name}-${i}`}>
                     <div className={"flex-fill"}>{++i}.</div>
-                    <div className={"flex-fill"}>{ratee.name}</div>
-                    <div className={"flex-fill"}>{ratee.email}</div>
-                    <div className={"flex-fill"}>{ratee.position}</div>
+                    <div className={"flex-fill"}>{rater.name}</div>
+                    <div className={"flex-fill"}>{rater.email}</div>
+                    <div className={"flex-fill"}>{rater.position}</div>
                     <div className={"flex-fill"}>Invite</div>
                   </div>
                 ))}

@@ -16,7 +16,7 @@ const projectSchema = new Schema({
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
       },
       position: { type: String },
-      ratees: [{
+      raters: [{
         name: { type: String },
         email: { type: String },
         position: { type: String },
