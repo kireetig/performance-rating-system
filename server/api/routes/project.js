@@ -65,7 +65,7 @@ router.get("/:projectId/invite", checkToken, (req, res, next) => {
   Project.find({ _id: projectId }, (err, result) => {
     if (err) errorHandler(res, err);
     User.findById(result[0].userId, (err, userResult) => {
-        if (err) errorHandler(res, err);
+      if (err) errorHandler(res, err);
       result[0].participants.map((rater) => {
         const token = jwt.sign(
           {
@@ -105,11 +105,11 @@ router.get("/rating", (req, res, next) => {
       const ratees = [];
       let rater = null;
       result.participants.map((participant) => {
-          if(rater === null && participant._id == raterId){
-              rater = {
-                  _id: participant._id,
-                  name: participant.name
-          }
+        if (rater === null && participant._id == raterId) {
+          rater = {
+            _id: participant._id,
+            name: participant.name,
+          };
         }
 
         const isRater =
@@ -121,7 +121,7 @@ router.get("/rating", (req, res, next) => {
             email: participant.email,
             position: participant.position,
             isSelf: participant._id == raterId,
-            answers: []
+            answers: [],
           });
         }
       });
@@ -142,39 +142,52 @@ router.get("/rating", (req, res, next) => {
   });
 });
 
-router.post('/ratingSubmit', (req, res, next) => {
+router.post("/ratingSubmit", (req, res, next) => {
   const data = jwt.decode(req.body.token);
   const raterId = data.raterId;
   const ratees = req.body.ratees;
-  Project.findById(data.projectId, (err, result) => { 
+  Project.findById(data.projectId, (err, result) => {
     if (err) errorHandler(res, err);
-    ratees.map(ratee => {
-      result.participants.map(participant => {
-        if(participant._id == ratee._id){
-          participant.raters.map(rater => {
-            if(rater._id == raterId){
+    ratees.map((ratee) => {
+      result.participants.map((participant) => {
+        if (participant._id == ratee._id) {
+          participant.raters.map((rater) => {
+            if (rater._id == raterId) {
               rater.answers = ratee.answers;
             }
           });
         }
       });
     });
-    Project.replaceOne({ _id: result._id }, result).then(replaceResult => {
-      res.status(200).json({
-        data: replaceResult,
-        status: 200,
+    Project.replaceOne({ _id: result._id }, result)
+      .then((replaceResult) => {
+        res.status(200).json({
+          data: replaceResult,
+          status: 200,
+        });
+      })
+      .catch((replaceErr) => {
+        res.status(500).json({
+          error: replaceErr,
+          status: 500,
+        });
       });
-    }).catch(replaceErr => {
-      res.status(500).json({
-        error: replaceErr,
-        status: 500,
-      });
-    })
   });
-})
+});
 
 router.get("/getAll", checkToken, (req, res, next) => {
   Project.find({ userId: req.userData.id }, (err, result) => {
+    if (err) errorHandler(res, err);
+    res.status(200).json({
+      data: result,
+      status: 200,
+    });
+  });
+});
+
+router.get("/get/:projectId", (req, res, next) => {
+  const projectId = req.params.projectId;
+  Project.findById(projectId, (err, result) => {
     if (err) errorHandler(res, err);
     res.status(200).json({
       data: result,

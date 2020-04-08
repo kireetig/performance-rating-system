@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import { axiosInstance } from "../../utils/api";
 import { toast } from "react-toastify";
 import { useHistory, useParams } from "react-router-dom";
-import { HOME_URL } from "../../contants/routerContants";
+import { HOME_URL, CREATE_PROJECT_URL } from "../../contants/routerContants";
 import * as _ from "lodash";
 import { USER_ID } from "../../contants/storageContants";
 import { ParticipantList } from "./ParticipantList/ParticipantList";
@@ -19,22 +19,20 @@ export interface IProject {
   participants?: IParticipant[];
 }
 
-
-
 export interface IParticipant {
   _id?: any;
   name: string;
   email: string;
   position: string;
-  raters:  IRater[];
+  raters: IRater[];
 }
 
-interface IRater{
+interface IRater {
   name: string;
   email: string;
   position: string;
   answers: any[];
-};
+}
 
 export const CreateProject: React.FC = (props) => {
   const [project, setProject] = React.useState<IProject>({
@@ -48,9 +46,11 @@ export const CreateProject: React.FC = (props) => {
     name: "",
     email: "",
     position: "",
-    raters: []
+    raters: [],
   });
-  const [isInviteBtnDisabled, setIsInviteBtnDisabled ] = React.useState<boolean>(false);
+  const [isInviteBtnDisabled, setIsInviteBtnDisabled] = React.useState<boolean>(
+    false
+  );
 
   const history = useHistory();
   const { projectId } = useParams();
@@ -61,15 +61,18 @@ export const CreateProject: React.FC = (props) => {
     setProject(proj);
   };
 
+  const getDetails = () => {
+    axiosInstance.get(`/project/get/${projectId}`).then(res => res.data.data).then(res => {
+      res.startDate = new Date(res.startDate);
+      res.endDate = new Date(res.endDate);
+      delete res.__v;
+      setProject(res);
+    });
+  }
+
   React.useEffect(() => {
-    if (history.location.state) {
-      const proj = history.location.state as any;
-      proj.startDate = new Date(proj.startDate);
-      proj.endDate = new Date(proj.endDate);
-      delete proj.__v;
-      setProject(proj);
-    }
-  }, [history.location.state]);
+    getDetails();
+  }, []);
 
   const handleParticipantChange = (value: string, key: string) => {
     const part = Object.assign({}, participant) as any;
@@ -113,30 +116,54 @@ export const CreateProject: React.FC = (props) => {
       participant.name.length !== 0 &&
       participant.position.length !== 0
     ) {
-      const proj = Object.assign({}, project) as any;
-      proj.participants.push(participant);
-      setProject(proj);
-      setParticipant({
-        name: "",
-        email: "",
-        position: "",
-        raters: []
-      });
+      if (history.location.pathname === CREATE_PROJECT_URL) {
+        addParticipantToList(participant);
+      } else {
+        const proj = {...project} as any;
+        proj.participants.push(participant);
+        axiosInstance
+          .post("project/update", {
+            ...proj,
+            userId: localStorage.getItem(USER_ID),
+          })
+          .then((res) => {
+            getDetails();
+          })
+          .catch((err) => {
+            toast.error("Unable to add Candidate please try again later");
+          });
+      }
     } else {
       toast.error("Fill in proper details");
     }
   };
 
+  const addParticipantToList = (participan: IParticipant) => {
+    const proj = Object.assign({}, project) as any;
+    proj.participants.push(participant);
+    setProject(proj);
+    setParticipant({
+      name: "",
+      email: "",
+      position: "",
+      raters: [],
+    });
+  };
+
   const inviteAll = () => {
     setIsInviteBtnDisabled(true);
-    axiosInstance.get(`/project/${projectId}/invite`).then(res => {
-      toast.success("Succesfully invited everyone");
-    }).catch(err => {
-      toast.error("Something went wrong. Please try again later");
-    }).finally(() => {
-      setIsInviteBtnDisabled(false);
-    });
-  }
+    axiosInstance
+      .get(`/project/${projectId}/invite`)
+      .then((res) => {
+        toast.success("Succesfully invited everyone");
+      })
+      .catch((err) => {
+        toast.error("Something went wrong. Please try again later");
+      })
+      .finally(() => {
+        setIsInviteBtnDisabled(false);
+      });
+  };
 
   return (
     <div className={`container ${style.content}`}>
@@ -233,12 +260,17 @@ export const CreateProject: React.FC = (props) => {
           </div>
         </div>
         <div className="col-12">
-        <Button variant="primary" disabled={isInviteBtnDisabled} className="mb-2" onClick={inviteAll}>
+          <Button
+            variant="primary"
+            disabled={isInviteBtnDisabled}
+            className="mb-2"
+            onClick={inviteAll}
+          >
             Invite All
           </Button>
         </div>
         <div className="col-12">
-              <ParticipantList list={project?.participants || []}/>
+          <ParticipantList list={project?.participants || []} />
         </div>
         <div className="col-12 text-center mt-5">
           <Button variant="primary" onClick={createProject}>
