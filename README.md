@@ -28,3 +28,9 @@ DB - Mongodb
 ## Assumptions
 1. Admin are only users of the system.
 2. Admin can create various projects. (so they can use each project from different department or team).
+
+## how to run
+1. Open cmd/bash and go to each of root, server and web folder and run "npm i"
+2. in root of this project if run "npm run dev" both backend and frontend server will be running.
+3. frontend runs on "http://localhost:3000/"
+4. backend runs on "http://localhost:8000/"
