@@ -1,4 +1,4 @@
-# performance-rating-system
+# Performance-rating-system
 This application is used for rating performance by group of people. This is developed using react and node js 
 
 ## How It works
@@ -14,5 +14,17 @@ This application is used for rating performance by group of people. This is deve
 10. When click on invite all. An email will be sent to participant asking them to attend review.
 11. When clicked on link then will be transfered to system when they attend review and rate (at present questions and answer choices are static).
 12. Onces submitted Review. Can see Report of there answers in project details.
+13. Can't edit participant details as of now. Can only delete and re-enter
 
+## Tech stack
+Frontend - React js
+Backend - node js
+DB - Mongodb
 
+## Things to do
+1. Admin can upload questions (can give type of answers expected like text filed or multiple choose, if multiple choose profile posibile options)
+2. Can Download Report
+
+## Assumptions
+1. Admin are only users of the system.
+2. Admin can create various projects. (so they can use each project from different department or team).
