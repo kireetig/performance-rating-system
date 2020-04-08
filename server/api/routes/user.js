@@ -36,7 +36,7 @@ router.post('/signup', (req, res, next) => {
                             status: 200,
                             message: 'User Created',
                             token,
-                            userId: result._id
+                            user: result
                         });
                     }).catch(error => {
                         res.status(500).json({
@@ -69,7 +69,7 @@ router.post('/login', (req, res, next) => {
                 if (result) {
                     const token = jwt.sign({
                             email: user[0].email,
-                            id: user[0].id
+                            id: user[0]._id
                         },
                         config.JWT_KEY,
                         {
@@ -79,7 +79,7 @@ router.post('/login', (req, res, next) => {
                         message: 'Auth Successful',
                         status: 200,
                         token,
-                        userId: user[0].id
+                        user: user[0]
                     })
                 }
                 return res.status(401).json({

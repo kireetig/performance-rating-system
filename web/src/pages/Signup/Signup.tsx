@@ -4,7 +4,7 @@ import style from "./signup.module.scss";
 import { LOGIN_URL, HOME_URL } from "../../contants/routerContants";
 import { toast } from "react-toastify";
 import { axiosInstance } from "../../utils/api";
-import { WEB_TOKEN, USER_ID } from "../../contants/storageContants";
+import { WEB_TOKEN, USER_DETAILS } from "../../contants/storageContants";
 
 export const Signup: React.FC = (props) => {
   const [name, setName] = React.useState("");
@@ -33,7 +33,7 @@ export const Signup: React.FC = (props) => {
         })
         .then((res) => {
           localStorage.setItem(WEB_TOKEN, res.data.token);
-          localStorage.setItem(USER_ID, res.data.userId);
+          localStorage.setItem(USER_DETAILS, res.data.user);
           toast.success("Successfully created account");
           history.push(HOME_URL);
         })

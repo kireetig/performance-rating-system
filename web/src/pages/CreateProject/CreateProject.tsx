@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useHistory, useParams } from "react-router-dom";
 import { HOME_URL, CREATE_PROJECT_URL } from "../../contants/routerContants";
 import * as _ from "lodash";
-import { USER_ID } from "../../contants/storageContants";
+import { USER_DETAILS } from "../../contants/storageContants";
 import { ParticipantList } from "./ParticipantList/ParticipantList";
 
 export interface IProject {
@@ -28,6 +28,7 @@ export interface IParticipant {
 }
 
 interface IRater {
+  _id?: any;
   name: string;
   email: string;
   position: string;
@@ -62,13 +63,16 @@ export const CreateProject: React.FC = (props) => {
   };
 
   const getDetails = () => {
-    axiosInstance.get(`/project/get/${projectId}`).then(res => res.data.data).then(res => {
-      res.startDate = new Date(res.startDate);
-      res.endDate = new Date(res.endDate);
-      delete res.__v;
-      setProject(res);
-    });
-  }
+    axiosInstance
+      .get(`/project/get/${projectId}`)
+      .then((res) => res.data.data)
+      .then((res) => {
+        res.startDate = new Date(res.startDate);
+        res.endDate = new Date(res.endDate);
+        delete res.__v;
+        setProject(res);
+      });
+  };
 
   React.useEffect(() => {
     getDetails();
@@ -92,10 +96,11 @@ export const CreateProject: React.FC = (props) => {
       toast.error("All fields are required");
     } else {
       const url = projectId ? "project/update" : "project/create";
+      const userDetail: any = localStorage.getItem(USER_DETAILS);
       axiosInstance
         .post(url, {
           ...project,
-          userId: localStorage.getItem(USER_ID),
+          userId: userDetail?._id,
         })
         .then((res) => {
           history.push(HOME_URL);
@@ -119,12 +124,12 @@ export const CreateProject: React.FC = (props) => {
       if (history.location.pathname === CREATE_PROJECT_URL) {
         addParticipantToList(participant);
       } else {
-        const proj = {...project} as any;
+        const proj = { ...project } as any;
         proj.participants.push(participant);
         axiosInstance
           .post("project/update", {
             ...proj,
-            userId: localStorage.getItem(USER_ID),
+            userId: (localStorage.getItem(USER_DETAILS) as any)._id,
           })
           .then((res) => {
             getDetails();
@@ -270,7 +275,7 @@ export const CreateProject: React.FC = (props) => {
           </Button>
         </div>
         <div className="col-12">
-          <ParticipantList list={project?.participants || []} />
+          <ParticipantList list={project?.participants || []} getDetails={getDetails} />
         </div>
         <div className="col-12 text-center mt-5">
           <Button variant="primary" onClick={createProject}>

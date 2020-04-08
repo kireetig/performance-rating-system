@@ -76,14 +76,14 @@ router.get("/:projectId/invite", checkToken, (req, res, next) => {
         );
         const mailOptions = {
           from: config.EMAIL,
-          to: config.EMAIL, // ratee.email
+          to: ratee.email,
           subject: "Invitation to attend Performance Review",
           html: `<div>You have been invited to attend Performance Reviews by <b>${userResult.name}</b>. <a href="http://localhost:3000/project/rate?token=${token}">Click here to start rating</a><div>`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
-          if (err) {
-            errorHandler(res, err);
+          if (error) {
+            errorHandler(res, error);
           } else {
             res.status(200).json({
               data: info.response,
@@ -93,6 +93,34 @@ router.get("/:projectId/invite", checkToken, (req, res, next) => {
         });
       });
     });
+  });
+});
+
+router.post("/invite", checkToken, (req, res, next) => {
+  const token = jwt.sign(
+    {
+      projectId: req.body.projectId,
+      raterId: req.body.raterId,
+    },
+    config.JWT_KEY
+  );
+
+  const mailOptions = {
+    from: config.EMAIL,
+    to: req.body.email,
+    subject: "Invitation to attend Performance Review",
+    html: `<div>You have been invited to attend Performance Reviews by <b>${req.body.name}</b>. <a href="http://localhost:3000/project/rate?token=${token}">Click here to start rating</a><div>`,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      errorHandler(res, error);
+    } else {
+      res.status(200).json({
+        data: info.response,
+        status: 200,
+      });
+    }
   });
 });
 
@@ -193,6 +221,37 @@ router.get("/get/:projectId", (req, res, next) => {
       data: result,
       status: 200,
     });
+  });
+});
+
+router.post("/delete", (req, res, next) => {
+  const projectId = req.body.projectId;
+  Project.findById(projectId, (err, result) => {
+    const participantIndex = result.participants.findIndex(
+      (item) => item._id == req.body.rateeId
+    );
+    if (req.body.type === "ratee") {
+      result.participants.splice(participantIndex, 1);
+    }
+    if (req.body.type === "rater") {
+      const raterIndex = result.participants[participantIndex].raters.findIndex(
+        (item) => item._id == req.body.raterId
+      );
+      result.participants[participantIndex].raters.splice(raterIndex, 1);
+    }
+    Project.replaceOne({ _id: projectId }, result)
+      .then((replaceResult) => {
+        res.status(200).json({
+          data: replaceResult,
+          status: 200,
+        });
+      })
+      .catch((replaceErr) => {
+        res.status(500).json({
+          error: replaceErr,
+          status: 500,
+        });
+      });
   });
 });
 
