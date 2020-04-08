@@ -1,0 +1,11 @@
+.footer{
+    display: flex;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+}
+
+.body{
+    height: calc(100vh - 130px);
+    overflow: scroll;
+}

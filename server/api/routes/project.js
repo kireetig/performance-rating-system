@@ -121,6 +121,7 @@ router.get("/rating", (req, res, next) => {
             email: participant.email,
             position: participant.position,
             isSelf: participant._id == raterId,
+            answers: []
           });
         }
       });
@@ -140,6 +141,37 @@ router.get("/rating", (req, res, next) => {
     });
   });
 });
+
+router.post('/ratingSubmit', (req, res, next) => {
+  const data = jwt.decode(req.body.token);
+  const raterId = data.raterId;
+  const ratees = req.body.ratees;
+  Project.findById(data.projectId, (err, result) => { 
+    if (err) errorHandler(res, err);
+    ratees.map(ratee => {
+      result.participants.map(participant => {
+        if(participant._id == ratee._id){
+          participant.raters.map(rater => {
+            if(rater._id == raterId){
+              rater.answers = ratee.answers;
+            }
+          });
+        }
+      });
+    });
+    Project.replaceOne({ _id: result._id }, result).then(replaceResult => {
+      res.status(200).json({
+        data: replaceResult,
+        status: 200,
+      });
+    }).catch(replaceErr => {
+      res.status(500).json({
+        error: replaceErr,
+        status: 500,
+      });
+    })
+  });
+})
 
 router.get("/getAll", checkToken, (req, res, next) => {
   Project.find({ userId: req.userData.id }, (err, result) => {

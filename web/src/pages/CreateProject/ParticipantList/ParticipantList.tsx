@@ -5,8 +5,12 @@ import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./participantList.module.scss";
 import { ListModal } from "../ListModal/ListModal";
-import { useHistory } from "react-router-dom";
-import { CREATE_PROJECT_URL } from "../../../contants/routerContants";
+import { useHistory, Link } from "react-router-dom";
+import {
+  CREATE_PROJECT_URL,
+  VIEW_REPORT,
+} from "../../../contants/routerContants";
+import { generateLink } from "../../../utils/generatePath";
 
 interface IParticipantList {
   list: IParticipant[];
@@ -32,12 +36,18 @@ export const ParticipantList: React.FC<IParticipantList> = (props) => {
         <Card key={`${participant.name}-${i}`}>
           <Accordion.Toggle as={Card.Header} eventKey={i.toString()}>
             <div className="row">
-              <div className="col-4">
+              <div className="col-3">
                 {isNotCreate() && <FontAwesomeIcon icon={faChevronRight} />}{" "}
                 {participant.name}
               </div>
-              <div className="col-4">{participant.email}</div>
-              <div className="col-4">{participant.position}</div>
+              <div className="col-3">{participant.email}</div>
+              <div className="col-3">{participant.position}</div>
+              {isNotCreate() && <div className="col-3">
+                <Link to={{
+                  pathname: generateLink(VIEW_REPORT, {candidateId: participant._id}),
+                  state: participant
+                }}>View Report</Link>
+              </div>}
             </div>
           </Accordion.Toggle>
           {isNotCreate() && (
@@ -53,11 +63,10 @@ export const ParticipantList: React.FC<IParticipantList> = (props) => {
                 </div>
                 {participant.raters.map((rater, i) => (
                   <div className={"d-flex"} key={`${rater.name}-${i}`}>
-                    <div className={"flex-fill"}>{++i}.</div>
+                    <div className={"flex-fill"}>{i + 1}.</div>
                     <div className={"flex-fill"}>{rater.name}</div>
                     <div className={"flex-fill"}>{rater.email}</div>
                     <div className={"flex-fill"}>{rater.position}</div>
-                    <div className={"flex-fill"}>Invite</div>
                   </div>
                 ))}
               </Card.Body>
