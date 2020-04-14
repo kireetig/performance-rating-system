@@ -34,3 +34,4 @@ DB - Mongodb
 2. in root of this project if run "npm run dev" both backend and frontend server will be running.
 3. frontend runs on "http://localhost:3000/"
 4. backend runs on "http://localhost:8000/"
+5.

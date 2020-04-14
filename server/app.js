@@ -8,7 +8,7 @@ const morgan = require("morgan");
 const userRoutes = require('./api/routes/user');
 const projectRoutes = require('./api/routes/project');
 
-const url = 'mongodb://127.0.0.1:27017/performance-rating?retryWrites=true'
+const url = 'mongodb://127.0.0.1:27017/performance-rating?retryWrites=true';
 
 // connect to db
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
